@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Edit Salary</h2>
+  <form method="POST">
+    {{ form.csrf_token }}
+    {{ form.hidden_tag() }}
+    {{ form.base_salary.label }}
+    {{ form.base_salary(class="form-control") }}
+    {{ form.bonuses.label }}
+    {{ form.bonuses(class="form-control") }}
+    {{ form.deductions.label }}
+    {{ form.deductions(class="form-control") }}
+    {{ form.effective_date.label }}
+    {{ form.effective_date(class="form-control") }}
+    {{ form.submit(class="btn btn-primary mt-3") }}
+  </form>
+  <a href="{{ url_for('salary') }}" class="btn btn-secondary mt-3">Back</a>
+{% endblock %}

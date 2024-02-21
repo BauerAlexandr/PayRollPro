@@ -1,0 +1,21 @@
+/* styles.css */
+
+/* Стили для стрелок сворачиваемых элементов */
+.collapsible {
+    cursor: pointer;
+    user-select: none;
+}
+
+.collapsible:after {
+    content: '\25B6'; /* Символ стрелки вправо */
+    color: #777;
+    font-size: 16px;
+    float: right;
+    margin-left: 5px;
+}
+
+.collapsible.active:after {
+    content: '\25BC'; /* Символ стрелки вниз */
+}
+
+/* Дополнительные стили по вашему усмотрению */

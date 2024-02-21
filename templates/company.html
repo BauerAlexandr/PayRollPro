@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Information</title>
+    <link rel="icon" href="{{ url_for('static', filename='faviconnn.png') }}" type="image/x-icon" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Playfair Display', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .btn-custom {
+            background-color: #6c63ff;
+
+            border: none;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-custom:hover {
+            background-color: #4e4bff;
+            color: black;
+
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+        }
+        
+        .left-column {
+            float: left;
+            width: 50%;
+            padding: 10px;
+        }
+        
+        .right-column {
+            float: right;
+            width: 50%;
+            padding: 10px;
+        }
+
+        /* Improved modal design */
+        .modal-content {
+            border-radius: 15px;
+        }
+
+        .modal-header {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .modal-footer {
+            border-top: none;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .d-flex {
+            justify-content: center;
+        }
+    
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a  href="{{ url_for('index') }}" class="btn btn-primary btn-custom"><i class="fas fa-arrow-left"></i> Back</a>
+        <div class="d-flex text-center  mb-4">
+            
+            <h2 class="mb-0">Company Information</h2>
+            <a href="#" id="notifications"> 
+                <i class="fas fa-bell"></i>
+            </a>
+
+        </div>
+        {% if user %}
+            <form method="post">
+                {{ company_form.hidden_tag() }}
+                
+
+                {% if not user.company %}
+                    <!-- Поля для первого этапа (ввода названия компании) -->
+                    <div class="form-group">
+                        {{ company_form.name.label(class="form-control-label") }}
+                        {{ company_form.name(class="form-control", id="name") }}
+                    </div>
+                    <button type="submit" name="next_step" class="btn btn-primary btn-custom btn-block">Next Step</button>
+                {% else %}
+                    <div class="left-column">
+                        <!-- Поля для второго этапа (остальной информации о компании) -->
+                        <div class="form-group">
+                            {{ company_form.name.label(class="form-control-label") }}
+                            {{ company_form.name(class="form-control", id="name") }}
+                        </div>
+                        <div class="form-group">
+                            {{ company_form.description.label(class="form-control-label") }}
+                            {{ company_form.description(class="form-control", id="description") }}
+                        </div>
+                        <div class="form-group">
+                            {{ company_form.company_type.label(class="form-control-label") }}
+                            {{ company_form.company_type(class="form-control", id="company_type") }}
+                        </div>
+                        <div class="form-group">
+                            {{ company_form.contact_info.label(class="form-control-label") }}
+                            {{ company_form.contact_info(class="form-control", id="contact_info") }}
+                        </div>
+                        <div class="form-group">
+                            {{ company_form.foundation_date.label(class="form-control-label") }}
+                            {{ company_form.foundation_date(class="form-control", id="foundation_date") }}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-custom btn-block">Save Company Information</button>
+                    </div>
+                    <div class="right-column">
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-primary btn-custom" data-toggle="modal" data-target="#addDepartmentModal">
+                            Add Department
+                        </button>
+                        
+                        <!-- Modal -->
+                        <div class="modal fade" id="addDepartmentModal" tabindex="-1" role="dialog" aria-labelledby="addDepartmentModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="addDepartmentModalLabel">Add Department</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="addDepartmentForm" action="{{ url_for('company') }}" method="post">
+                                            <div class="form-group">
+                                                <label for="departmentName">Department Name:</label>
+                                                <input type="text" class="form-control" id="departmentName" name="department_name">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="departmentDescription">Department Description:</label>
+                                                <textarea class="form-control" id="departmentDescription" name="department_description"></textarea>
+                                            </div>
+                                            <button type="submit" name="add_department" class="btn btn-primary btn-custom">Add Department</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button type="button" class="btn btn-primary btn-custom" data-toggle="modal" data-target="#departmentModal">
+                            View Departments
+                        </button>
+
+                        <!-- Модальное окно с таблицей отделов -->
+                        <div class="modal fade" id="departmentModal" tabindex="-1" role="dialog" aria-labelledby="departmentModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="departmentModalLabel">Departments</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body" style="overflow-x: auto;">
+                                        <!-- Таблица с отделами -->
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Name</th>
+                                                    <th>Description</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% if departments %}
+                                                    {% for department in departments %}
+                                                        <tr>
+                                                            <td>{{ department.id }}</td>
+                                                            <td>{{ department.name }}</td>
+                                                            <td>{{ department.description }}</td>
+                                                            <td>
+                                                                <a href="{{ url_for('edit_department', department_id=department.id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                                                <form method="post" action="{{ url_for('delete_department', department_id=department.id) }}" style="display: inline;">
+                                                                    {{ department_form.csrf_token }}
+                                                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this department?')">Delete</button>
+                                                                </form>
+                                                                <a href="{{ url_for('department_info', department_id=department.id) }}" class="btn btn-info btn-sm">About Department</a>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <tr>
+                                                        <td colspan="4">No departments found.</td>
+                                                    </tr>
+                                                {% endif %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="btn btn-primary btn-custom" href="{{ url_for('add_position') }}" >Add position</a>
+                        <button type="button" class="btn btn-primary btn-custom" data-toggle="modal" data-target="#addPositionModal">Assign Position</button>
+                        <!-- Модальное окно добавления должности -->
+                        <div class="modal fade" id="addPositionModal" tabindex="-1" role="dialog" aria-labelledby="addPositionModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="addPositionModalLabel">Assign Position</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <!-- Форма добавления должности -->
+                                        <form method="post" action="{{ url_for('company') }}">
+                                            {{ form.hidden_tag() }}
+                                            <label for="employee_id">Employee:</label>
+                                            <select name="employee_id">
+                                                {% for employee in company.employees if employee.role!='manager' %}
+                                                    <option value="{{ employee.id }}">{{ employee.username }}</option>
+                                                {% endfor %}
+                                            </select>
+
+                                            <label for="{{ form.position_name.name }}">Select Position:</label>
+                                            <select name="{{ form.position_name.name }}" class="form-control">
+                                                {% for position_id, position_name in form.position_name.choices %}
+                                                    <option value="{{ position_id }}">{{ position_name }}</option>
+                                                {% endfor %}
+                                            </select>
+
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                            <button type="submit" class="btn btn-primary btn-custom btn-block">Assign Position</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    
+                    
+                        <a href="{{ url_for('assign_salary') }}" class="btn btn-primary btn-custom">Assign Salary</a>
+
+                        
+
+                        <!-- Модальное окно с уведомлениями -->
+                        <div class="modal fade" id="notificationsModal" tabindex="-1" role="dialog" aria-labelledby="notificationsModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="notificationsModalLabel">Join Requests</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <!-- Список уведомлений -->
+                                        <!-- Список запросов на вступление в компанию -->
+                                        <ul>
+                                            {% for request in join_requests %}
+                                                <li>
+                                                    {{ request.user.username }} wants to join {{ company.name }}.
+                                                    <!-- Формы для принятия или отклонения запросов -->
+                                                    <form method="post" action="{{ url_for('process_join_request', request_id=request.id, action='accept') }}" style="display: inline;">
+                                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                                        <button type="submit">Accept</button>
+                                                    </form>
+                                                    <form method="post" action="{{ url_for('process_join_request', request_id=request.id, action='reject') }}" style="display: inline;">
+                                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                                        <button type="submit">Reject</button>
+                                                    </form>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <button type="button" class="btn btn-primary btn-custom" data-toggle="modal" data-target="#employeesModal">
+                            View Employees
+                        </button>
+
+                        <!-- Модальное окно -->
+                        <div class="modal fade" id="employeesModal" tabindex="-1" role="dialog" aria-labelledby="employeesModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="employeesModalLabel">Employees</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body" style="overflow-x: auto;">
+                                        <!-- Таблица сотрудников -->
+                                        <table class="table" >
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Username</th>
+                                                    <th>Position</th>
+                                                    <th>Role</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for employee in company.employees if employee.role!='manager' %}
+                                                    <tr>
+                                                        <td>{{ employee.id }}</td>
+                                                        <td>{{ employee.username }}</td>
+                                                        <td>{{ employee.position.name }}</td>
+                                                        <td>{{ employee.role }}</td>
+                                                        <td>
+                                                            <!-- Форма пользователя -->
+                                                            <form method="post" action="{{ url_for('distribute_employee', user_id=employee.id) }}">
+                                                                <label for="department_id">Assign to Department:</label>
+                                                                <select name="department_id">
+                                                                    {% for department in departments %}
+                                                                        <option value="{{ department.id }}">{{ department.name }}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                                                <button type="submit" class="btn btn-primary btn-custom btn-block">Distribute</button>
+                                                            </form>
+                                                            <!-- Добавьте здесь дополнительные действия, если необходимо -->
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </form>
+
+        {% else %}
+            <p>You need to be logged in as a manager to access this page. <a href="{{ url_for('login') }}">Login</a></p>
+        {% endif %}
+        
+        
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            // Обработчик отправки формы добавления отдела через AJAX
+            $('#addDepartmentForm').submit(function(event){
+                event.preventDefault(); // Предотвращаем отправку формы по умолчанию
+
+                // Получаем данные формы
+                var formData = {
+                    'departmentName': $('#departmentName').val(),
+                    'departmentDescription': $('#departmentDescription').val()
+                };
+
+                // Отправляем AJAX запрос
+                $.ajax({
+                    type: 'POST',
+                    url: '/add_department', // Замените на нужный URL
+                    data: formData,
+                    dataType: 'json',
+                    encode: true
+                })
+                .done(function(data) {
+                    // Обновляем страницу после успешного добавления отдела
+                    location.reload();
+                });
+
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function(){
+            // Обработчик нажатия на значок уведомлений
+            $('#notifications').click(function(){
+                // Открываем модальное окно с уведомлениями
+                $('#notificationsModal').modal('show');
+            });
+        });
+    </script>
+
+</body>
+</html>

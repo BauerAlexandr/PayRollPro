@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ url_for('static', filename='faviconnn.png') }}" type="image/x-icon" />
+    <title>Welcome</title>
+    <!-- Подключение Bootstrap CSS (можно использовать CDN) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Playfair Display', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            display: flex;
+            justify-content: center;
+
+            align-items: center;
+            height: 100vh;
+        }
+
+        .menu-container {
+            opacity: 0;
+            transform: translateY(-180px);
+            transition: opacity 2s ease;
+            height: calc(100vh - 150px); /* высота экрана минус высота логотипа */
+            
+        }
+
+        .container.loaded .menu-container {
+            opacity: 1;
+            transition-delay: 3s;
+            transform: translateY(0);
+        }
+
+        .welcome-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 1;
+            transition: opacity 1s ease;
+        }
+
+        .loaded .welcome-text {
+            opacity: 0;
+            transition-delay: 2s;
+        }
+
+        .description-container {
+            display: flex;
+            flex-direction: row-reverse;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        h1 {
+            color: #343a40;
+            margin-bottom: 2rem;
+            font-size: 3rem;
+            margin-top: 2rem;
+        }
+
+        p {
+            color: #6c757d;
+            margin: 0;
+            font-size: 1.5rem;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .logo {
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            color: #343a40;
+        }
+
+        .navbar {
+            
+            flex-wrap: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+        }
+
+        .navbar-brand {
+            font-size: 2.5rem;
+            color: #343a40;
+            font-weight: bold;
+            margin-left: var(--bs-navbar-brand-margin-end);
+             /* Отступ сверху */
+        }
+
+        .navbar-nav {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            position: relative;
+            justify-content: space-evenly;
+            --bs-nav-link-padding-x: 1rem;
+        }
+        @media screen and (max-width: 500px) {
+            .navbar-nav {
+                flex-direction: column;
+            }
+        }
+        @media screen and (min-width: 500px) {
+            .navbar-nav {
+                flex-direction: row;
+            }
+        }
+
+        .nav-item {
+            margin: 0;
+        }
+
+        .nav-link {
+            color: #696e77;
+            font-size: 1.5rem;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+            text-decoration: underline;
+        }
+
+        .nav-link:hover {
+            color: #373e49;
+            text-decoration: none;
+        }
+
+        .welcome-container {
+            opacity: 1;
+            transition: opacity 2s ease;
+        }
+
+        .welcome-container.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .description {
+            margin-top: 20px;
+        }
+
+        img {
+            margin-top: 20px;
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* New Styles */
+        .floating-menu {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: white;
+            border-top: 1px solid #ddd;
+            z-index: 1000;
+            display: none; /* Initially hidden */
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .floating-menu a {
+            display: inline-block;
+            padding: 10px 15px;
+            color: #333;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .register-login-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="welcome-container" id="welcome-container">
+            <div class="welcome-text">
+                <h1 class="display-4">Welcome to the PayrollPro</h1>
+                {% if username %}
+                    <p class="lead">Hello, {{ username }}!</p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="menu-container">
+            {% if username %}
+                
+                <img src="\static\logo.png" alt="Company Logo" width="150" height="150" class="d-inline-block align-top">
+                
+                <nav class="navbar">
+                    <h2 class="navbar-brand">PayrollPro</h2>
+
+                </nav>
+                <nav class="navbar">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('profile') }}">Edit Profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('salary') }}">Manage Salary</a>
+                        </li>
+                        {% if user_role == 'manager' %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('company') }}">Add Company</a>
+                            </li>
+                        {% endif %}
+                        {% if user.role == 'employee' %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('my_company') }}">My Company</a>
+                            </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="description-container">
+                    <div class="description">
+                        <p>PayrollPro - это современное приложение для учета и управления зарплатами и сотрудниками в вашей компании. Наш логотип в виде косатки символизирует мощь и величие вашей организации, а также нашу стремительность в обеспечении ваших потребностей.</p>
+                    </div>
+                    <img src="\static\killer whale.png" alt="Image Description" width="250" height="250" class="d-inline-block align-top">
+                </div>
+            {% else %}
+                <div class="register-login-container">
+                    <p class="lead"><a class="btn btn-primary btn-lg" href="{{ url_for('register_login') }}">Register/Login</a></p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <!-- Подключение Bootstrap JS (если требуется) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const container = document.querySelector('.container');
+            const welcomeContainer = document.querySelector('.welcome-container');
+            container.classList.add('loaded');
+            
+            // Show floating menu when content overflows vertically
+            const content = document.querySelector('.menu-container');
+            const floatingMenu = document.createElement('div');
+            floatingMenu.className = 'floating-menu';
+            content.appendChild(floatingMenu);
+
+            const floatingMenuLinks = floatingMenu.querySelectorAll('a');
+
+            function checkOverflow() {
+                if (content.scrollHeight > window.innerHeight) {
+                    floatingMenu.style.display = 'block';
+                } else {
+                    floatingMenu.style.display = 'none';
+                }
+            }
+
+            checkOverflow();
+
+            window.addEventListener('resize', checkOverflow);
+
+            // Smooth scroll to content when floating menu link is clicked
+            floatingMenuLinks.forEach(link => {
+                link.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

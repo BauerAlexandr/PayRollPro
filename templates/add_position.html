@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+        <div class="card mt-5">
+          <div class="card-body">
+            <a  href="{{ url_for('company') }}" class="btn btn-primary btn-custom"><i class="fas fa-arrow-left"></i> Back</a>
+            <h2 class="card-title text-center">Add Position</h2>
+            <form method="post">
+              {{ form.hidden_tag() }}
+              <div class="form-group">
+                <label for="{{ form.position_name.id }}">{{ form.position_name.label }}</label>
+                {{ form.position_name(class="form-control", id=form.position_name.id) }}
+              </div>
+
+              <h3 class="mt-4">Existing Positions:</h3>
+              <ul class="list-group">
+                {% for position_id, position_name in form.position_name.choices %}
+                  <li class="list-group-item">{{ position_name }}</li>
+                {% endfor %}
+              </ul>
+              
+              <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary btn-custom">Add Position</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

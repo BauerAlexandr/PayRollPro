@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register and Login</title>
+    <link rel="icon" href="{{ url_for('static', filename='faviconnn.png') }}" type="image/x-icon" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Playfair Display', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 300px;
+            text-align: left;
+        }
+
+        h3 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+
+
+        form {
+            margin-top: 20px;
+            display: block;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 8px;
+            color: green;
+        }
+
+        .error {
+            color: red;
+        }
+
+        input[type="submit"] {
+            background-color: #6c63ff;
+            color: white;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #4e4bff;
+        }
+
+        .toggle-btns {
+            margin-top: 10px;
+        }
+
+        .toggle-btns button {
+
+            background-color: #000000;
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            margin: 5px;
+            border-radius: 48px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-left: calc(50% - 60px);
+        }
+
+        .toggle-btns button:hover {
+
+            background-color: #000000d4;
+        }
+    </style>
+    <script>
+        function toggleForm(formId) {
+            document.getElementById('registerForm').style.display = (formId === 'registerForm') ? 'block' : 'none';
+            document.getElementById('loginForm').style.display = (formId === 'loginForm') ? 'block' : 'none';
+            
+            // Скрываем или показываем соответствующую кнопку в зависимости от выбранной формы
+            if (formId === 'registerForm') {
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('registerBtn').style.display = 'block';
+            } else {
+                document.getElementById('loginBtn').style.display = 'block';
+                document.getElementById('registerBtn').style.display = 'none';
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">   
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li style="color: {% if 'Ошибка' in message %}red{% else %}green{% endif %};">{{ message }}</li>
+                        
+
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" id="registerForm" style="display: none;">
+            {{ registration_form.csrf_token }}
+            <h3>Регистрация</h3>
+            <div class="form-group">
+                <label for="role">Роль:</label>
+                <select id="role" name="role" required>
+                    <option value="employee">Сотрудник</option>
+                    <option value="manager">Директор</option>
+                </select>
+            </div>
+            <label for="username">Имя пользователя:</label>
+            <input type="text" name="username" required>
+            <br>
+            <label for="password">Пароль:</label>
+            <input type="password" name="password" required>
+            <br>
+            <input type="submit" value="Register">
+        </form>
+
+        <form method="POST" id="loginForm">
+            {{ login_form.csrf_token }}
+            <h3>Вход</h3>
+            <label for="username">Имя пользователя:</label>
+            <input type="text" name="username" required>
+            <br>
+            <label for="password">Пароль:</label>
+            <input type="password" name="password" required>
+            <br>
+            <input type="submit" value="Login">
+        </form>
+        <div class="toggle-btns">
+            <hr>
+            <button id="loginBtn" onclick="toggleForm('registerForm')">Регистрация</button>
+            <button id="registerBtn" style="display: none;" onclick="toggleForm('loginForm')">Вход</button>
+        </div>
+    </div>
+</body>
+</html>

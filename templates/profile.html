@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="icon" href="{{ url_for('static', filename='faviconnn.png') }}" type="image/x-icon" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Playfair Display', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+        }
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            border-radius: 5px;
+            background-color: #6c63ff;
+            color: #fff;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background-color: #4e4bff;
+        }
+
+        .btn-back i {
+            margin-right: 5px;
+        }
+
+        
+        .profile-container {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        .profile-photo-container {
+            border-radius: 50%;
+            overflow: hidden;
+            border: 5px solid #6c63ff;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 5px;
+        }
+        .profile-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        .profile-photo:hover {
+            transform: scale(1.1);
+        }
+        .form-control {
+            border-radius: 10px;
+            box-shadow: none;
+        }
+        .submit-btn {
+            background-color: #6c63ff;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .submit-btn:hover {
+            background-color: #4e4bff;
+        }
+        .logout-btn {
+            background-color: #ff5252;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .logout-btn:hover {
+            background-color: #ff2a2a;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-title {
+            font-size: 24px;
+            color: #6c63ff;
+            margin-bottom: 20px;
+        }
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn-container .btn {
+            flex: 1;
+            margin: 0 5px;
+        }
+        .btn-container .btn:first-child {
+            margin-left: 0;
+        }
+        .btn-container .btn:last-child {
+            margin-right: 0;
+        }
+        .btn-container .btn:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+
+            <div class="col-md-8 profile-container">
+                
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <a href="{{ url_for('index') }}" class="btn btn-secondary btn-back"><i class="fas fa-arrow-left"></i> Back</a>
+                    <h2 class="text-center mb-0">User Profile - {{user.role}}</h2>
+                    <div style="width: 50px;"></div><!-- Empty div for spacing -->
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <div class="profile-photo-container">
+                            {% if user.photo_path %}
+                                <img src="{{ url_for('static', filename=user.photo_path.replace('\\', '/')) }}" alt="Profile Photo" class="profile-photo">
+                            {% else %}
+                                <img src="{{ url_for('static', filename='no image.png') }}" alt="No Image Available" class="profile-photo">
+                            {% endif %}
+
+                        </div>
+                        
+                        <form method="POST" enctype="multipart/form-data">
+                            {{ form.csrf_token }}
+                            {{ form.photo.label }}
+                            <p><strong>Username:</strong> {{ user.username }}</p>
+                            {{ form.photo(class="form-control mt-0") }}
+                            <br>
+                            {{ form.submit(class="btn btn-primary btn-block submit-btn mt-0") }}
+                        </form>
+
+                    </div>
+                    <div class="col-md-8">
+                        <form method="POST" action="{{ url_for('profile') }}">
+                            {{ form.hidden_tag() }}
+                            <h3 class="form-title">Edit Profile</h3>
+                            <div class="form-group">
+                                {{ form.first_name(class="form-control", placeholder="First name") }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.last_name(class="form-control", placeholder="Last name") }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.middle_name(class="form-control", placeholder="Middle name") }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.birth_date(class="form-control", placeholder="YYYY-MM-DD") }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.job_place(class="form-control", placeholder="Job place") }}
+                            </div>
+                            
+                            <div class="btn-container">
+                                {{ form.submit(class="btn btn-primary submit-btn") }}
+                                <a href="{{ url_for('logout') }}" class="btn btn-danger logout-btn">Logout</a>
+                            </div>
+                            
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salary Information</title>
+    <link rel="icon" href="{{ url_for('static', filename='faviconnn.png') }}" type="image/x-icon" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="static\p.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Playfair Display', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+        }
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            border-radius: 5px;
+            background-color: #6c63ff;
+            color: #fff;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background-color: #4e4bff;
+        }
+
+        .btn-back i {
+            margin-right: 5px;
+        }
+        .form-control {
+            border-radius: 10px;
+            box-shadow: none;
+        }
+        .submit-btn {
+            background-color: #6c63ff;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .submit-btn:hover {
+            background-color: #4e4bff;
+        }
+        .custom-btn {
+            background-color: #6c63ff; /* ваш выбранный цвет */
+            color: #fff; /* цвет текста */
+        }
+
+        .custom-btn:hover {
+            background-color: #4e4bff; /* ваш выбранный цвет при наведении */
+            
+        }
+        .btn-secondary {
+            background-color: #6c63ff;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #4e4bff;
+        }
+        .form-row {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="profile-container">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <a href="{{ url_for('index') }}" class="btn btn-back"><i class="fas fa-arrow-left"></i> Back</a>
+                        <h2 class="text-center mb-0">Salary Information</h2>
+                        <div style="width: 50px;"></div><!-- Empty div for spacing -->
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <form method="POST" action="{{ url_for('salary') }}">
+                                {{ form.csrf_token }}
+                                {{ form.hidden_tag() }}
+                                <div class="form-row">
+                                    <div class="col">
+                                        {{ form.base_salary.label }}
+                                        {{ form.base_salary(class="form-control", placeholder="Base Salary") }}
+                                    </div>
+                                    <div class="col">
+                                        {{ form.bonuses.label }}
+                                        {{ form.bonuses(class="form-control", placeholder="Bonuses") }}
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col">
+                                        {{ form.deductions.label }}
+                                        {{ form.deductions(class="form-control", placeholder="Deductions") }}
+                                    </div>
+                                    <div class="col">
+                                        {{ form.effective_date.label }}
+                                        {{ form.effective_date(class="form-control", placeholder="Effective Date") }}
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn custom-btn mt-3 btn-block">Add Salary</button>
+                            </form>
+                            <hr>
+                            <form method="GET" action="{{ url_for('salary') }}">
+                                <label for="start_date">Start Date:</label>
+                                <input type="date" name="start_date" class="form-control">
+                                <label for="end_date">End Date:</label>
+                                <input type="date" name="end_date" class="form-control">
+                                <button type="submit" class="btn custom-btn mt-3 btn-block">Apply Period</button>
+                            </form>
+                            <hr>
+                            <form method="GET" action="{{ url_for('salary') }}">
+                                <label for="year">Select Year:</label>
+                                <select name="year" class="form-control" id="year" onchange="this.form.submit()">
+                                    <option value="all_years" {% if selected_year is none or selected_year == 'all_years' %}selected{% endif %}>All Years</option>
+                                    {% for y in years %}
+                                        <option value="{{ y }}" {% if selected_year == y %}selected{% endif %}>{{ y }}</option>
+                                    {% endfor %}
+                                </select>
+                            </form>
+                        </div>
+                        <div class="col-md-6">
+                            <!-- Display Salary Information -->
+                            {% if user_salaries %}
+                                {% if start_date and end_date %}
+                                    <h4>Total Amount for {{ start_date }} to {{ end_date }}: {{ total_amount }}</h4>
+                                    {% if total_months_period != 0 %}
+                                        <h4>Average Monthly Salary for {{ start_date }} to {{ end_date }}: {{ total_amount / total_months_period }}</h4>
+                                    {% endif %}
+                                {% elif selected_year == None %}
+                                    <h4>Total Amount for All Years: {{ total_amount }}</h4>
+                                    {% if total_months != 0 %}
+                                        <h4>Average Monthly Salary for All Years: {{ total_amount / total_months }}</h4>
+                                    {% else %}
+                                        <p>No data available for calculation</p>
+                                    {% endif %}
+                                {% elif selected_year %}
+                                    <h4>Total Amount for {{ selected_year }}: {{ total_amount }}</h4>
+                                    <h4>Average Monthly Salary for {{ selected_year }}: {{ total_amount / total_months }}</h4>
+                                {% endif %}
+                                {% for year, month_salaries in user_salaries.items() %}
+                                    {% if selected_year == 'all_years' or selected_year == year[0] or not selected_year %}
+                                        <h3>{{ year[0] }}/{{ year[1] }}</h3>
+                                        <div class="accordion" id="salaryAccordion">
+                                            {% for salary in month_salaries %}
+                                                <div class="card">
+                                                    <details>
+                                                        <summary>Salary information</summary>
+                                                        <div id="collapse{{ salary.id }}" class="collapse show" aria-labelledby="heading{{ salary.id }}" data-parent="#salaryAccordion">
+                                                            <div class="card-body">
+                                                                <p><strong>Base Salary:</strong> {{ salary.base_salary }}</p>
+                                                                <p><strong>Bonuses:</strong> {{ salary.bonuses }}</p>
+                                                                <p><strong>Deductions:</strong> {{ salary.deductions }}</p>
+                                                                <p><strong>Effective Date:</strong> {{ salary.effective_date }}</p>
+                                                                <p><strong>Total Amount:</strong> {{ salary.total_amount }}</p>
+                                                                <!-- Кнопка редактирования с передачей данных через data-атрибуты -->
+                                                                <button class="btn btn-primary btn-sm edit-btn" 
+                                                                        data-salary-id="{{ salary.id }}"
+                                                                        data-base-salary="{{ salary.base_salary }}"
+                                                                        data-bonuses="{{ salary.bonuses }}"
+                                                                        data-deductions="{{ salary.deductions }}"
+                                                                        data-effective-date="{{ salary.effective_date }}">
+                                                                    Edit
+                                                                </button>
+                                                                <!-- Форма для удаления -->
+                                                                <form method="POST" action="{{ url_for('delete_salary', salary_id=salary.id) }}" style="display: inline;">
+                                                                    {{ form.csrf_token }}
+                                                                    <button type="button" class="btn btn-danger btn-sm delete-btn" data-salary-id="{{ salary.id }}">Delete</button>
+                                                                </form>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </details>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                <p>No salary information available</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно редактирования -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Salary</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="editForm" method="POST">
+                    {{ form.csrf_token }}
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="id_base_salary">Base Salary:</label>
+                            <input type="text" class="form-control" id="id_base_salary" name="base_salary">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_bonuses">Bonuses:</label>
+                            <input type="text" class="form-control" id="id_bonuses" name="bonuses">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_deductions">Deductions:</label>
+                            <input type="text" class="form-control" id="id_deductions" name="deductions">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_effective_date">Effective Date:</label>
+                            <input type="date" class="form-control" id="id_effective_date" name="effective_date">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно подтверждения удаления -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this salary entry?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Подключение необходимых скриптов -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // JavaScript-код для управления модальными окнами
+        $(document).ready(function() {
+            // Открытие модального окна редактирования
+            $('.edit-btn').click(function() {
+                var salaryId = $(this).data('salary-id');
+                var baseSalary = $(this).data('base-salary');
+                var bonuses = $(this).data('bonuses');
+                var deductions = $(this).data('deductions');
+                var effectiveDate = $(this).data('effective-date');
+
+                // Заполнение формы редактирования данными из data-атрибутов кнопки
+                $('#editForm #id_base_salary').val(baseSalary);
+                $('#editForm #id_bonuses').val(bonuses);
+                $('#editForm #id_deductions').val(deductions);
+                $('#editForm #id_effective_date').val(effectiveDate);
+                $('#editForm').attr('action', '/edit_salary/' + salaryId);
+                
+                $('#editModal').modal('show');
+            });
+
+            // Открытие модального окна удаления
+            $('.delete-btn').click(function() {
+                var salaryId = $(this).data('salary-id');
+                $('#deleteModal #confirmDelete').attr('data-salary-id', salaryId);
+                $('#deleteModal').modal('show');
+            });
+
+            // Обработка подтверждения удаления
+            $('#confirmDelete').click(function() {
+                var salaryId = $(this).data('salary-id');
+                window.location.href = '/delete_salary/' + salaryId;
+            });
+        });
+    </script>
+</body>
+</html>

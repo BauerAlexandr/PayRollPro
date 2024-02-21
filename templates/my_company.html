@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Company</title>
+    <link rel="icon" href="{{ url_for('static', filename='faviconnn.png') }}" type="image/x-icon" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>My Company</h2>
+        {% if user %}
+            <p>Hello, {{ user.username }}!</p>
+            <p>Here, you can send a join request to available companies:</p>
+            <form method="post">
+                <div class="form-group">
+                    <label for="company_id">Select a company:</label>
+                    <select class="form-control" id="company_id" name="company_id" required>
+                        {% for company in available_companies %}
+                            <option value="{{ company.id }}">{{ company.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {{ join_request_form.csrf_token }}
+                <button type="submit" class="btn btn-primary">Send Join Request</button>
+            </form>
+        {% else %}
+            <p>You need to be logged in as an employee to access this page. <a href="{{ url_for('login') }}">Login</a></p>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru" prefix="og: http://ogp.me/ns#">
+<head>
+    <meta charset="utf-8">
+    <title>Midjourney AI — Создать Изображение</title>
+    <link rel="shortcut icon" href="https://midjourney.co/favicon-32x32.png" type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Создавайте ИИ изображение с помощью Midjourney. Используйте этого простого бота с искусственным интеллектом, чтобы создавать уникальные изображения за считанные секунды. Просто введите текстовое описание, и Midjourney создаст для вас новое изображение.">
+    <meta name="keywords" content="midjourney, изображение, картинка, ИИ, генератор, openai, чат-бот, искусственный, интеллект, онлайн, бесплатно">
+
+    <meta property="og:title" content="Midjourney AI — Создать Изображение">
+    <meta property="og:description" content="Создавайте ИИ изображение с помощью Midjourney. Используйте этого простого бота с искусственным интеллектом, чтобы создавать уникальные изображения за считанные секунды. Просто введите текстовое описание, и Midjourney создаст для вас новое изображение.">
+    <meta property="og:locale" content="ru">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://midjourney.co">
+    <meta property="og:site_name" content="Midjourney AI — Создать Изображение">
+    <meta property="og:width" content="1024">
+    <meta property="og:height" content="1024">
+    <meta property="og:image" content="https://midjourney.co/midjourney.png">
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Midjourney AI — Создать Изображение" />
+    <meta name="twitter:description" content="Создавайте ИИ изображение с помощью Midjourney. Используйте этого простого бота с искусственным интеллектом, чтобы создавать уникальные изображения за считанные секунды. Просто введите текстовое описание, и Midjourney создаст для вас новое изображение." />
+    <meta name="twitter:image" content="https://midjourney.co/midjourney.png">
+
+    <meta name="csrf-token" content="hehgqbDLcoDCm8XuKMNuI4gWsSSCgNietmZPpjD9">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#9754ff">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="theme-color" content="#ffffff">
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GKBGF8PZ1C"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-GKBGF8PZ1C');
+    </script>
+
+    
+        <link href="https://midjourney.co/assets/generator/assets/index.css?v3.45" rel="stylesheet">
+</head>
+<body>
+<div class="page">
+    <div class="page__wrapper">
+            <div id="root"></div>
+    <div id="modal-root"></div>
+    </div>
+</div>
+<script src="https://midjourney.co/assets/js/libs.min.js?v3.45"></script>
+<script src="https://midjourney.co/assets/js/main.js?v3.45"></script>
+    <script type="module" crossorigin src="https://midjourney.co/assets/generator/assets/index.js?v3.45"></script>
+</body>
+</html>
