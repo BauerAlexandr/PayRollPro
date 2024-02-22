@@ -122,8 +122,9 @@
             <div class="col-md-8 profile-container">
                 
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <a href="{{ url_for('index') }}" class="btn btn-secondary btn-back"><i class="fas fa-arrow-left"></i> Back</a>
-                    <h2 class="text-center mb-0">User Profile - {{user.role}}</h2>
+                    <a href="{{ url_for('index') }}" class="btn btn-secondary btn-back"><i class="fas fa-arrow-left"></i> Назад</a>
+                    <h2 class="text-center mb-0">Профиль пользователя - {% if user.role == 'employee' %}Сотрудник{% elif user.role == 'manager' %}Директор{% else %}Нет роли{% endif %}</h2>
+
                     <div style="width: 50px;"></div><!-- Empty div for spacing -->
                 </div>
                 
@@ -141,7 +142,7 @@
                         <form method="POST" enctype="multipart/form-data">
                             {{ form.csrf_token }}
                             {{ form.photo.label }}
-                            <p><strong>Username:</strong> {{ user.username }}</p>
+                            <p><strong>Имя пользователя:</strong> {{ user.username }}</p>
                             {{ form.photo(class="form-control mt-0") }}
                             <br>
                             {{ form.submit(class="btn btn-primary btn-block submit-btn mt-0") }}
@@ -151,26 +152,26 @@
                     <div class="col-md-8">
                         <form method="POST" action="{{ url_for('profile') }}">
                             {{ form.hidden_tag() }}
-                            <h3 class="form-title">Edit Profile</h3>
+                            <h3 class="form-title">Редактировать профиль</h3>
                             <div class="form-group">
-                                {{ form.first_name(class="form-control", placeholder="First name") }}
+                                {{ form.first_name(class="form-control", placeholder="Фамилия") }}
                             </div>
                             <div class="form-group">
-                                {{ form.last_name(class="form-control", placeholder="Last name") }}
+                                {{ form.last_name(class="form-control", placeholder="Имя") }}
                             </div>
                             <div class="form-group">
-                                {{ form.middle_name(class="form-control", placeholder="Middle name") }}
+                                {{ form.middle_name(class="form-control", placeholder="Отчество") }}
                             </div>
                             <div class="form-group">
-                                {{ form.birth_date(class="form-control", placeholder="YYYY-MM-DD") }}
+                                {{ form.birth_date(class="form-control", placeholder="Дата рождения") }}
                             </div>
                             <div class="form-group">
-                                {{ form.job_place(class="form-control", placeholder="Job place") }}
+                                {{ form.job_place(class="form-control", placeholder="Место работы") }}
                             </div>
                             
                             <div class="btn-container">
                                 {{ form.submit(class="btn btn-primary submit-btn") }}
-                                <a href="{{ url_for('logout') }}" class="btn btn-danger logout-btn">Logout</a>
+                                <a href="{{ url_for('logout') }}" class="btn btn-danger logout-btn">Выйти</a>
                             </div>
                             
                         </form>

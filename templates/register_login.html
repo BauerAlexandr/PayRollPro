@@ -89,25 +89,28 @@
 
         .toggle-btns {
             margin-top: 10px;
+            text-align: center;
         }
 
         .toggle-btns button {
-
+            margin: 5px auto;
             background-color: #000000;
             color: white;
             border: none;
             padding: 20px 40px;
-            margin: 5px;
+            
             border-radius: 48px;
             cursor: pointer;
             transition: background-color 0.3s;
-            margin-left: calc(50% - 60px);
+            
         }
 
         .toggle-btns button:hover {
 
             background-color: #000000d4;
         }
+
+
     </style>
     <script>
         function toggleForm(formId) {
@@ -155,19 +158,19 @@
             <label for="password">Пароль:</label>
             <input type="password" name="password" required>
             <br>
-            <input type="submit" value="Register">
+            <input type="submit" value="Регистрация">
         </form>
 
         <form method="POST" id="loginForm">
             {{ login_form.csrf_token }}
-            <h3>Вход</h3>
+            <h3>Авторизация</h3>
             <label for="username">Имя пользователя:</label>
             <input type="text" name="username" required>
             <br>
             <label for="password">Пароль:</label>
             <input type="password" name="password" required>
             <br>
-            <input type="submit" value="Login">
+            <input type="submit" value="Вход">
         </form>
         <div class="toggle-btns">
             <hr>

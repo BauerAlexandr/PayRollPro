@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <!-- Мета-теги и стили ... -->
     <meta charset="UTF-8">
@@ -94,23 +94,23 @@
 </head>
 <body>
     <div class="container">
-        <a  href="{{ url_for('company') }}" class="btn btn-back btn-custom"><i class="fas fa-arrow-left"></i> Back</a>
+        <a  href="{{ url_for('company') }}" class="btn btn-back btn-custom"><i class="fas fa-arrow-left"></i>Назад</a>
         <div class="row">
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <h2>Department Information</h2>
+                        <h2>Об отделе</h2>
                     </div>
                     <div class="card-body">
                         <h3>{{ department.name }}</h3>
-                        <p>Description: {{ department.description }}</p>
+                        <p>Описание: {{ department.description }}</p>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <h3>Salary Information</h3>
+                        <h3>Информация о зарплате</h3>
                     </div>
                     <div class="card-body">
                         <form method="POST">
@@ -121,17 +121,16 @@
                             <div class="form-group">
                                 {{ form.end_date.label }} {{ form.end_date }}
                             </div>
-                            <button type="submit" class="btn submit-btn">Submit</button>
+                            <button type="submit" class="btn submit-btn">Применить</button>
                         </form>
                     </div>
                 </div>
                 <div class="summary-card">
-                    <h3>Summary</h3>
-                    <p>Total Department Salary: {{ total_department_salary }}</p>
-                    <p>Total Salary for All Employees: {{ total_salary_all_employees }}</p>
-                    <p>Average Employee Salary {{ average_monthly_salary }}</p>
+                    <h3>Сводка</h3>
+                    <p>Общая зарплата в отделе: {{ total_department_salary }}</p>
+                    <p>Средняя зарплата в отделе {{ average_monthly_salary }}</p>
                 </div>
-                <a href="#" class="btn  btn-back" data-toggle="modal" data-target="#employeeTableModal">Employees</a>
+                <a href="#" class="btn  btn-back" data-toggle="modal" data-target="#employeeTableModal">Сотрудники</a>
             </div>
         </div>
         
@@ -143,7 +142,7 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="employeeTableModalLabel">Employees</h5>
+                    <h5 class="modal-title" id="employeeTableModalLabel">Сотрудники</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -153,8 +152,8 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Username</th>
-                                <th>Total Salary</th>
+                                <th>Имя пользователя</th>
+                                <th>Общая зарплата</th>
                                 <!-- Добавьте другие заголовки, если необходимо -->
                             </tr>
                         </thead>
@@ -176,7 +175,7 @@
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
                 </div>
             </div>
         </div>

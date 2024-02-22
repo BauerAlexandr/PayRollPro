@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 
 <head>
     <meta charset="UTF-8">
@@ -15,6 +15,12 @@
             font-family: 'Playfair Display', sans-serif;
             background-color: #f8f9fa;
             margin: 0;
+        }
+        .submit-btn {
+            background-color: #6c63ff;
+        }
+        .submit-btn:hover {
+            background-color: #4e4bff;
         }
 
         .container {
@@ -194,9 +200,9 @@
     <div class="container">
         <div class="welcome-container" id="welcome-container">
             <div class="welcome-text">
-                <h1 class="display-4">Welcome to the PayrollPro</h1>
+                <h1 class="display-4">Добро пожаловать в PayrollPro</h1>
                 {% if username %}
-                    <p class="lead">Hello, {{ username }}!</p>
+                    <p class="lead">Здравствуйте, {{ username }}!</p>
                 {% endif %}
             </div>
         </div>
@@ -213,23 +219,23 @@
                 <nav class="navbar">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('profile') }}">Edit Profile</a>
+                            <a class="nav-link" href="{{ url_for('profile') }}">Профиль</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('salary') }}">Manage Salary</a>
+                            <a class="nav-link" href="{{ url_for('salary') }}">Управлять зарплатой</a>
                         </li>
                         {% if user_role == 'manager' %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('company') }}">Add Company</a>
+                                <a class="nav-link" href="{{ url_for('company') }}">Моя компания</a>
                             </li>
                         {% endif %}
                         {% if user.role == 'employee' %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('my_company') }}">My Company</a>
+                                <a class="nav-link" href="{{ url_for('my_company') }}">Моя компания</a>
                             </li>
                         {% endif %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                            <a class="nav-link" href="{{ url_for('logout') }}">Выйти</a>
                         </li>
                     </ul>
                 </nav>
@@ -241,7 +247,7 @@
                 </div>
             {% else %}
                 <div class="register-login-container">
-                    <p class="lead"><a class="btn btn-primary btn-lg" href="{{ url_for('register_login') }}">Register/Login</a></p>
+                    <p><a class="btn btn-primary btn-lg submit-btn" href="{{ url_for('register_login') }}">Регистрация/Вход</a></p>
                 </div>
             {% endif %}
         </div>

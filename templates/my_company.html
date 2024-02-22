@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,13 +10,13 @@
 </head>
 <body>
     <div class="container">
-        <h2>My Company</h2>
+        <h2>Моя компания</h2>
         {% if user %}
-            <p>Hello, {{ user.username }}!</p>
-            <p>Here, you can send a join request to available companies:</p>
+            <p>Здравствуйте, {{ user.username }}!</p>
+            <p>Здесь вы можете отправить запрос на присоединение к доступным компаниям:</p>
             <form method="post">
                 <div class="form-group">
-                    <label for="company_id">Select a company:</label>
+                    <label for="company_id">Выбрать компанию:</label>
                     <select class="form-control" id="company_id" name="company_id" required>
                         {% for company in available_companies %}
                             <option value="{{ company.id }}">{{ company.name }}</option>
@@ -24,10 +24,10 @@
                     </select>
                 </div>
                 {{ join_request_form.csrf_token }}
-                <button type="submit" class="btn btn-primary">Send Join Request</button>
+                <button type="submit" class="btn btn-primary">Отправить запрос на присоединение</button>
             </form>
         {% else %}
-            <p>You need to be logged in as an employee to access this page. <a href="{{ url_for('login') }}">Login</a></p>
+            <p>Вам необходимо войти в систему как сотруднику, чтобы получить доступ к этой странице. <a href="{{ url_for('login') }}">Login</a></p>
         {% endif %}
     </div>
 </body>

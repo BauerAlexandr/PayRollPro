@@ -82,8 +82,8 @@
             <div class="col-md-8">
                 <div class="profile-container">
                     <div class="d-flex justify-content-between align-items-center mb-4">
-                        <a href="{{ url_for('index') }}" class="btn btn-back"><i class="fas fa-arrow-left"></i> Back</a>
-                        <h2 class="text-center mb-0">Salary Information</h2>
+                        <a href="{{ url_for('index') }}" class="btn btn-back"><i class="fas fa-arrow-left"></i>Назад</a>
+                        <h2 class="text-center mb-0">Информация о заработной плате</h2>
                         <div style="width: 50px;"></div><!-- Empty div for spacing -->
                     </div>
                     <div class="row">
@@ -94,38 +94,38 @@
                                 <div class="form-row">
                                     <div class="col">
                                         {{ form.base_salary.label }}
-                                        {{ form.base_salary(class="form-control", placeholder="Base Salary") }}
+                                        {{ form.base_salary(class="form-control", placeholder="Оклад") }}
                                     </div>
                                     <div class="col">
                                         {{ form.bonuses.label }}
-                                        {{ form.bonuses(class="form-control", placeholder="Bonuses") }}
+                                        {{ form.bonuses(class="form-control", placeholder="Бонусы") }}
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="col">
                                         {{ form.deductions.label }}
-                                        {{ form.deductions(class="form-control", placeholder="Deductions") }}
+                                        {{ form.deductions(class="form-control", placeholder="Вычеты") }}
                                     </div>
                                     <div class="col">
                                         {{ form.effective_date.label }}
-                                        {{ form.effective_date(class="form-control", placeholder="Effective Date") }}
+                                        {{ form.effective_date(class="form-control", placeholder="Дата") }}
                                     </div>
                                 </div>
-                                <button type="submit" class="btn custom-btn mt-3 btn-block">Add Salary</button>
+                                <button type="submit" class="btn custom-btn mt-3 btn-block">Добавить зарплату</button>
                             </form>
                             <hr>
                             <form method="GET" action="{{ url_for('salary') }}">
-                                <label for="start_date">Start Date:</label>
+                                <label for="start_date">Начальная дата:</label>
                                 <input type="date" name="start_date" class="form-control">
-                                <label for="end_date">End Date:</label>
+                                <label for="end_date">Конечная дата:</label>
                                 <input type="date" name="end_date" class="form-control">
-                                <button type="submit" class="btn custom-btn mt-3 btn-block">Apply Period</button>
+                                <button type="submit" class="btn custom-btn mt-3 btn-block">Применить</button>
                             </form>
                             <hr>
                             <form method="GET" action="{{ url_for('salary') }}">
-                                <label for="year">Select Year:</label>
+                                <label for="year">Выбрать год:</label>
                                 <select name="year" class="form-control" id="year" onchange="this.form.submit()">
-                                    <option value="all_years" {% if selected_year is none or selected_year == 'all_years' %}selected{% endif %}>All Years</option>
+                                    <option value="all_years" {% if selected_year is none or selected_year == 'all_years' %}selected{% endif %}>Все годы</option>
                                     {% for y in years %}
                                         <option value="{{ y }}" {% if selected_year == y %}selected{% endif %}>{{ y }}</option>
                                     {% endfor %}
@@ -136,20 +136,20 @@
                             <!-- Display Salary Information -->
                             {% if user_salaries %}
                                 {% if start_date and end_date %}
-                                    <h4>Total Amount for {{ start_date }} to {{ end_date }}: {{ total_amount }}</h4>
+                                    <h4>Общая сумма за {{ start_date }} - {{ end_date }}: {{ total_amount }}</h4>
                                     {% if total_months_period != 0 %}
-                                        <h4>Average Monthly Salary for {{ start_date }} to {{ end_date }}: {{ total_amount / total_months_period }}</h4>
+                                        <h4>Среднемесячная заработная плата за {{ start_date }} - {{ end_date }}: {{ total_amount / total_months_period }}</h4>
                                     {% endif %}
                                 {% elif selected_year == None %}
-                                    <h4>Total Amount for All Years: {{ total_amount }}</h4>
+                                    <h4>Общая сумма за все годы: {{ total_amount }}</h4>
                                     {% if total_months != 0 %}
-                                        <h4>Average Monthly Salary for All Years: {{ total_amount / total_months }}</h4>
+                                        <h4>Среднемесячная заработная плата за все годы: {{ total_amount / total_months }}</h4>
                                     {% else %}
                                         <p>No data available for calculation</p>
                                     {% endif %}
                                 {% elif selected_year %}
-                                    <h4>Total Amount for {{ selected_year }}: {{ total_amount }}</h4>
-                                    <h4>Average Monthly Salary for {{ selected_year }}: {{ total_amount / total_months }}</h4>
+                                    <h4>Общая сумма за {{ selected_year }}: {{ total_amount }}</h4>
+                                    <h4>Среднемесячная заработная плата за {{ selected_year }}: {{ total_amount / total_months }}</h4>
                                 {% endif %}
                                 {% for year, month_salaries in user_salaries.items() %}
                                     {% if selected_year == 'all_years' or selected_year == year[0] or not selected_year %}
@@ -158,14 +158,14 @@
                                             {% for salary in month_salaries %}
                                                 <div class="card">
                                                     <details>
-                                                        <summary>Salary information</summary>
+                                                        <summary>Информация о зарплате</summary>
                                                         <div id="collapse{{ salary.id }}" class="collapse show" aria-labelledby="heading{{ salary.id }}" data-parent="#salaryAccordion">
                                                             <div class="card-body">
-                                                                <p><strong>Base Salary:</strong> {{ salary.base_salary }}</p>
-                                                                <p><strong>Bonuses:</strong> {{ salary.bonuses }}</p>
-                                                                <p><strong>Deductions:</strong> {{ salary.deductions }}</p>
-                                                                <p><strong>Effective Date:</strong> {{ salary.effective_date }}</p>
-                                                                <p><strong>Total Amount:</strong> {{ salary.total_amount }}</p>
+                                                                <p><strong>Оклад:</strong> {{ salary.base_salary }}</p>
+                                                                <p><strong>Бонусы:</strong> {{ salary.bonuses }}</p>
+                                                                <p><strong>Вычеты:</strong> {{ salary.deductions }}</p>
+                                                                <p><strong>Дата:</strong> {{ salary.effective_date }}</p>
+                                                                <p><strong>Общая сумма:</strong> {{ salary.total_amount }}</p>
                                                                 <!-- Кнопка редактирования с передачей данных через data-атрибуты -->
                                                                 <button class="btn btn-primary btn-sm edit-btn" 
                                                                         data-salary-id="{{ salary.id }}"
@@ -173,12 +173,12 @@
                                                                         data-bonuses="{{ salary.bonuses }}"
                                                                         data-deductions="{{ salary.deductions }}"
                                                                         data-effective-date="{{ salary.effective_date }}">
-                                                                    Edit
+                                                                    Редактировать
                                                                 </button>
                                                                 <!-- Форма для удаления -->
                                                                 <form method="POST" action="{{ url_for('delete_salary', salary_id=salary.id) }}" style="display: inline;">
                                                                     {{ form.csrf_token }}
-                                                                    <button type="button" class="btn btn-danger btn-sm delete-btn" data-salary-id="{{ salary.id }}">Delete</button>
+                                                                    <button type="button" class="btn btn-danger btn-sm delete-btn" data-salary-id="{{ salary.id }}">Удалить</button>
                                                                 </form>
                                                                 
                                                             </div>
@@ -190,7 +190,7 @@
                                     {% endif %}
                                 {% endfor %}
                             {% else %}
-                                <p>No salary information available</p>
+                                <p>Информация о заработной плате отсутствует</p>
                             {% endif %}
                         </div>
                     </div>
@@ -204,7 +204,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editModalLabel">Edit Salary</h5>
+                    <h5 class="modal-title" id="editModalLabel">Редактировать зарплату</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -213,25 +213,25 @@
                     {{ form.csrf_token }}
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="id_base_salary">Base Salary:</label>
+                            <label for="id_base_salary">Оклад:</label>
                             <input type="text" class="form-control" id="id_base_salary" name="base_salary">
                         </div>
                         <div class="form-group">
-                            <label for="id_bonuses">Bonuses:</label>
+                            <label for="id_bonuses">Бонусы:</label>
                             <input type="text" class="form-control" id="id_bonuses" name="bonuses">
                         </div>
                         <div class="form-group">
-                            <label for="id_deductions">Deductions:</label>
+                            <label for="id_deductions">Вычеты:</label>
                             <input type="text" class="form-control" id="id_deductions" name="deductions">
                         </div>
                         <div class="form-group">
-                            <label for="id_effective_date">Effective Date:</label>
+                            <label for="id_effective_date">Дата:</label>
                             <input type="date" class="form-control" id="id_effective_date" name="effective_date">
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
                     </div>
                 </form>
             </div>
@@ -243,17 +243,17 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                    <h5 class="modal-title" id="deleteModalLabel">Подтвердите удаление</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to delete this salary entry?
+                    Вы уверены, что хотите удалить эту запись о зарплате?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
+                    <button type="button" class="btn btn-danger" id="confirmDelete">Удалить</button>
                 </div>
             </div>
         </div>
